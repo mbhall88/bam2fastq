@@ -105,16 +105,8 @@ def get_unique_reads_pairs(reads):
     r2s = []
     for read in reads:
         tag = read.get_tag('RG')
-        is_unique_read1 = (
-                read.is_read1 and
-                not read.is_duplicate and
-                tag not in seen_read1_groups
-        )
-        is_unique_read2 = (
-                read.is_read2 and
-                not read.is_duplicate and
-                tag not in seen_read2_groups
-        )
+        is_unique_read1 = (read.is_read1 and tag not in seen_read1_groups)
+        is_unique_read2 = (read.is_read2 and tag not in seen_read2_groups)
         if is_unique_read1:
             r1s.append(read)
             seen_read1_groups.add(tag)

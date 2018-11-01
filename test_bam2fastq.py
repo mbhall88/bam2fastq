@@ -109,11 +109,11 @@ class TestGetUniqueReadPairs(unittest.TestCase):
         self.assertListEqual(r1, expected_r1)
         self.assertListEqual(r2, expected_r2)
 
-    def test_MultipleDuplicatesNoPrimary_ReturnEmptyLists(self):
+    def test_MultipleDuplicatesNoPrimary_ReturnOneR1AndOneR2(self):
         r1, r2 = bam2fastq.get_unique_reads_pairs(
-            [self.reads[2], self.reads[6]])
-        expected_r1 = []
-        expected_r2 = []
+            [self.reads[2], self.reads[3], self.reads[6]])
+        expected_r1 = [self.reads[2]]
+        expected_r2 = [self.reads[6]]
 
         self.assertListEqual(r1, expected_r1)
         self.assertListEqual(r2, expected_r2)
