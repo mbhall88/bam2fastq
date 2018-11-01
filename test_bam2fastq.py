@@ -68,21 +68,13 @@ class TestGetUniqueReadPairs(unittest.TestCase):
         for i in range(len(self.reads)):
             self.reads[i].set_tag('RG', '824f45e8-37f3-4cb9-8a05-63f0b7c9b959')
 
-    def test_OneR1_ReturnOneReadAndEmptyList(self):
-        r1, r2 = bam2fastq.get_unique_reads_pairs(self.reads[:1])
-        expected_r1 = [self.reads[0]]
-        expected_r2 = []
+    def test_OneR1_RaiseAssertError(self):
+        with self.assertRaises(AssertionError):
+            bam2fastq.get_unique_reads_pairs(self.reads[:1])
 
-        self.assertListEqual(r1, expected_r1)
-        self.assertListEqual(r2, expected_r2)
-
-    def test_OneR2_ReturnOneReadAndEmptyList(self):
-        r1, r2 = bam2fastq.get_unique_reads_pairs(self.reads[4:5])
-        expected_r1 = []
-        expected_r2 = [self.reads[4]]
-
-        self.assertListEqual(r1, expected_r1)
-        self.assertListEqual(r2, expected_r2)
+    def test_OneR2_RaiseAssertError(self):
+        with self.assertRaises(AssertionError):
+            bam2fastq.get_unique_reads_pairs(self.reads[4:5])
 
     def test_EmptyReads_ReturnEmptyLists(self):
         r1, r2 = bam2fastq.get_unique_reads_pairs([])
@@ -118,11 +110,12 @@ class TestGetUniqueReadPairs(unittest.TestCase):
         self.assertListEqual(r1, expected_r1)
         self.assertListEqual(r2, expected_r2)
 
-    def test_MultipleDuplicatesTwoReadGroups_ReturnThreeReads(self):
+    def test_MultipleDuplicatesTwoReadGroups_ReturnTwoPairsOfReads(self):
         self.reads[1].set_tag('RG', 'test')
+        self.reads[6].set_tag('RG', 'test')
         r1, r2 = bam2fastq.get_unique_reads_pairs(self.reads)
         expected_r1 = self.reads[:2]
-        expected_r2 = [self.reads[4]]
+        expected_r2 = [self.reads[4], self.reads[6]]
 
         self.assertListEqual(r1, expected_r1)
         self.assertListEqual(r2, expected_r2)

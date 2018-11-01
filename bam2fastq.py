@@ -114,6 +114,9 @@ def get_unique_reads_pairs(reads):
             r2s.append(read)
             seen_read2_groups.add(tag)
 
+    assert len(r1s) == len(r2s), \
+        f"Missing one member of read pair for {read.query_name}"
+
     return r1s, r2s
 
 
@@ -135,7 +138,8 @@ def get_read_ids(bam):
     """
     read_ids = set()
     for record in bam:
-        read_ids.add(record.query_name)
+        if record.is_paired:
+            read_ids.add(record.query_name)
 
     return read_ids
 
