@@ -68,13 +68,13 @@ def to_fastq_string(record):
     :param record: BAM record
     :return: A string representation of the four fastq lines
     """
-    qual = record.query_qualities
-    seq = record.query_sequence
+    qual = record.get_forward_qualities()
+    seq = record.get_forward_sequence()
 
     if seq is None or qual is None:
         return ''
     else:
-        qual = ''.join([chr(q + 33) for q in record.query_qualities])
+        qual = ''.join([chr(q + 33) for q in qual])
 
     rg = ''
     if record.is_read1:
